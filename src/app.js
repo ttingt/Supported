@@ -9,12 +9,20 @@ var Vector2 = require('vector2');
 var Vibe = require('ui/vibe');
 var Check = new UI.Image({
   position: new Vector2(10, 10),
-  size: new Vector2(10, 10),
-  image: 'checkmark10.png'
+  size: new Vector2(100, 100),
+  image: '../resources/images/checkmark10.png'
 });
 
+var circle = new UI.Circle({
+  position: new Vector2(10, 10),
+  radius: 3,
+  backgroundColor: 'white'
+});
+
+// Check.compositing("invert");
+
 var timeText = new UI.TimeText({
-  position: new Vector2(0, 80),
+  position: new Vector2(0, 95),
   size: new Vector2(144, 84),
   text: "%H:%M",
   font: 'bitham-42-bold',
@@ -23,13 +31,13 @@ var timeText = new UI.TimeText({
 });
 
 var rect = new UI.Rect({
-  position: new Vector2(0, 80),
+  position: new Vector2(0, 95),
   size: new Vector2(144, 1),
   backgroundColor: 'white'
 });
 
 var dateText = new UI.TimeText({
-  position: new Vector2(4, 50),
+  position: new Vector2(4, 65),
   size: new Vector2(144, 30),
   text: "%B %d",
   font: 'gothic-24-bold',
@@ -39,6 +47,7 @@ var dateText = new UI.TimeText({
 
 
 var main = new UI.Window({
+  fullscreen: true
   
 //   title: timeText,
 //   icon: 'images/menu_icon.png',
@@ -51,6 +60,7 @@ main.add(timeText);
 main.add(dateText);
 main.add(rect);
 main.add(Check);
+main.add(circle);
 
 main.show();
 Vibe.vibrate('long');
