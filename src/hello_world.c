@@ -1,4 +1,5 @@
 #include "pebble.h"
+#include "phoneRouting.h"
 
 #define INVERT_COLORS
 
@@ -15,6 +16,28 @@ static TextLayer *s_time_layer;
 static TextLayer *s_date_layer;
 static Layer *s_board_layer;
 
+
+static TextLayer *s_output_layer;
+
+static void up_click_handler(ClickRecognizerRef recognizer, void *context) {
+  text_layer_set_text(s_output_layer, "Up pressed!");
+  send_int();
+}
+
+static void select_click_handler(ClickRecognizerRef recognizer, void *context) {
+  text_layer_set_text(s_output_layer, "Select pressed!");
+}
+
+static void down_click_handler(ClickRecognizerRef recognizer, void *context) {
+  text_layer_set_text(s_output_layer, "Down pressed!");
+}
+
+static void click_config_provider(void *context) {
+  // Register the ClickHandlers
+  window_single_click_subscribe(BUTTON_ID_UP, up_click_handler);
+  window_single_click_subscribe(BUTTON_ID_SELECT, select_click_handler);
+  window_single_click_subscribe(BUTTON_ID_DOWN, down_click_handler);
+}
 
 void graphics_draw_line_wide(GContext *ctx, GPoint p0, GPoint p1) {
   for (int y_offset = 0; y_offset < 2; y_offset++) {
@@ -101,6 +124,15 @@ static void main_window_load(Window *window) {
   text_layer_set_font(s_date_layer, fonts_get_system_font(FONT_KEY_ROBOTO_CONDENSED_21));
   layer_add_child(window_layer, text_layer_get_layer(s_date_layer));
   
+  // Create output TextLayer
+  s_output_layer = text_layer_create(GRect(5, 0, 144, 50));
+  text_layer_set_font(s_output_layer, fonts_get_system_font(FONT_KEY_GOTHIC_24));
+  text_layer_set_text_color(s_output_layer, COLOR_FOREGROUND);
+  text_layer_set_text(s_output_layer, "No button pressed yet.");
+  text_layer_set_background_color(s_output_layer, GColorClear);
+  //text_layer_set_overflow_mode(s_output_layer, GTextOverflowModeWordWrap);
+  layer_add_child(window_layer, text_layer_get_layer(s_output_layer));
+  
 }
 
 static void main_window_unload(Window *window) {
@@ -120,6 +152,8 @@ static void init() {
   #ifdef PBL_SDK_2
   window_set_fullscreen(s_main_window, true);
   #endif
+    
+  window_set_click_config_provider(s_main_window, click_config_provider);
   
   window_stack_push(s_main_window, true);
 
