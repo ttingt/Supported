@@ -20,6 +20,8 @@ static Window *s_main_window;
 static TextLayer *s_time_layer;
 static TextLayer *s_date_layer;
 static Layer *s_board_layer;
+static Layer *window_layer;
+static Layer* circle_layer;
 
 
 static TextLayer *s_output_layer;
@@ -32,16 +34,6 @@ static void messageSend(int key, int value) {
   app_message_outbox_send();
 }
 
-//   void circle1_layer_update_callback(Layer *layer, GContext* ctx) {
-//   graphics_context_set_stroke_color(ctx, COLOR_FOREGROUND);
-//   draw_circle(ctx, GPoint(20,10));
-// }
-
-//   void circle2_layer_update_callback(Layer *layer, GContext* ctx) {
-//   graphics_context_set_stroke_color(ctx, COLOR_FOREGROUND);
-//   draw_circle(ctx, GPoint(30,10));
-// }
-
 void draw_circle1_update_proc(Layer *this_layer, GContext *ctx) {
   graphics_draw_circle(ctx, GPoint(20,10), 3);
 }
@@ -52,7 +44,7 @@ void draw_circle2_update_proc(Layer *this_layer, GContext *ctx) {
 
 
 static void inbox_received_callback(DictionaryIterator *iterator, void *context) {
-  Layer* circle_layer = layer_create(GRect(0, 0, 144, 168));
+  circle_layer = layer_create(GRect(0, 0, 144, 50));
   
   // Get the first pair
   Tuple *t = dict_read_first(iterator);
@@ -66,14 +58,14 @@ static void inbox_received_callback(DictionaryIterator *iterator, void *context)
     switch (t->key) {
       case 1:
         // Copy value and display
-//         snprintf(s_buffer, sizeof(s_buffer), "Received '%s'", t->value->cstring);
-//         text_layer_set_text(s_output_layer, s_buffer);
+        snprintf(s_buffer, sizeof(s_buffer), "Received '%s'", t->value->cstring);
+        text_layer_set_text(s_output_layer, s_buffer);
           layer_set_update_proc(circle_layer, draw_circle1_update_proc);
-//           layer_add_child(window_layer, circle_layer);
+           layer_add_child(window_layer, circle_layer);
         break;
       case 2:
           layer_set_update_proc(circle_layer, draw_circle2_update_proc); 
-//           layer_add_child(window_layer, circle_layer);
+          layer_add_child(window_layer, circle_layer);
       break;
     }
 
@@ -183,7 +175,7 @@ static void handle_second_tick(struct tm *tick_time, TimeUnits units_changed) {
 }
 
 static void main_window_load(Window *window) {
-  Layer *window_layer = window_get_root_layer(window);
+  window_layer = window_get_root_layer(window);
   GRect bounds = layer_get_bounds(window_layer);
 
   // Init the layer that shows the board
