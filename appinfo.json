@@ -4,42 +4,14 @@
         ""
     ],
     "companyName": "v.chan36@gmail.com",
-    "longName": "angeljs",
-    "projectType": "pebblejs",
+    "longName": "angelhacks",
+    "projectType": "native",
     "resources": {
-        "media": [
-            {
-                "file": "images/menu_icon.png",
-                "menuIcon": true,
-                "name": "IMAGE_MENU_ICON",
-                "type": "png"
-            },
-            {
-                "file": "images/logo_splash.png",
-                "name": "IMAGE_LOGO_SPLASH",
-                "type": "png"
-            },
-            {
-                "file": "images/tile_splash.png",
-                "name": "IMAGE_TILE_SPLASH",
-                "type": "png"
-            },
-            {
-                "file": "fonts/UbuntuMono-Regular.ttf",
-                "name": "MONO_FONT_14",
-                "type": "font"
-            },
-            {
-                "file": "images/checkmark10.png",
-                "name": "IMAGES_CHECKMARK10_PNG",
-                "type": "png"
-            }
-        ]
+        "media": []
     },
     "sdkVersion": "3",
-    "shortName": "angeljs",
-    "uuid": "3dfcf3d5-9d75-4df8-967f-0a10d2a1fa91",
-    "versionCode": 1,
+    "shortName": "angelhacks",
+    "uuid": "7f6023b6-e313-498a-a26b-d8d09af1a3a3",
     "versionLabel": "1.0",
     "watchapp": {
         "watchface": false
