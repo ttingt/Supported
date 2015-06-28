@@ -1,5 +1,5 @@
-#pragma once
+// #pragma once
 
-#include <pebble.h>
+// #include <pebble.h>
 
-static void send_int(void);
+// static void send_int(void);
