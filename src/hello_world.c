@@ -21,7 +21,13 @@ static TextLayer *s_output_layer;
 
 static void up_click_handler(ClickRecognizerRef recognizer, void *context) {
   text_layer_set_text(s_output_layer, "Up pressed!");
-  send_int();
+    DictionaryIterator *iterator;
+  app_message_outbox_begin(&iterator);
+
+  int key = 0;
+  int value = 1;
+  dict_write_int(iterator, key, &value, sizeof(int), true);
+  app_message_outbox_send();
 }
 
 static void select_click_handler(ClickRecognizerRef recognizer, void *context) {
