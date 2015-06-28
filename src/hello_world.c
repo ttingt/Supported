@@ -112,7 +112,7 @@ static void outbox_sent_callback(DictionaryIterator *iterator, void *context) {
 
 // ----- Click handlers for Pebble Watch
 static void up_click_handler(ClickRecognizerRef recognizer, void *context) {
-  text_layer_set_text(s_output_layer, "Up pressed!");
+//   text_layer_set_text(s_output_layer, "Up pressed!");
   messageSend(SEND_HELP_KEY, SEND_HELP_VALUE);
 }
 
