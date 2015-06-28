@@ -35,12 +35,22 @@ static void messageSend(int key, int value) {
   app_message_outbox_send();
 }
 
-void draw_circle1_update_proc(Layer *this_layer, GContext *ctx) {
+void draw_circle1_update_true(Layer *this_layer, GContext *ctx) {
+  graphics_context_set_stroke_color(ctx, COLOR_FOREGROUND);
+  graphics_fill_circle(ctx, GPoint(20,10), 3);
+}
+
+void draw_circle1_update_false(Layer *this_layer, GContext *ctx) {
   graphics_context_set_stroke_color(ctx, COLOR_FOREGROUND);
   graphics_draw_circle(ctx, GPoint(20,10), 3);
 }
 
-void draw_circle2_update_proc(Layer *this_layer, GContext *ctx) {
+void draw_circle2_update_true(Layer *this_layer, GContext *ctx) {
+  graphics_context_set_stroke_color(ctx, COLOR_FOREGROUND);
+  graphics_fill_circle(ctx, GPoint(30,10), 3);
+}
+
+void draw_circle2_update_false(Layer *this_layer, GContext *ctx) {
   graphics_context_set_stroke_color(ctx, COLOR_FOREGROUND);
   graphics_draw_circle(ctx, GPoint(30,10), 3);
 }
@@ -53,22 +63,30 @@ static void inbox_received_callback(DictionaryIterator *iterator, void *context)
   // Process all pairs present
   while (t != NULL) {
     // Long lived buffer
-    static char s_buffer[64];
+//    static char s_buffer[64];
 
     // Process this pair's key
     switch (t->key) {
       case 1:
-        // Copy value and display8
-        snprintf(s_buffer, sizeof(s_buffer), "Received '%s'", t->value->cstring);
+      // Copy value and display8
+      // snprintf(s_buffer, sizeof(s_buffer), "Received '%s'", t->value->cstring);
+      //text_layer_set_text(s_output_layer, s_buffer);
       circle_layer1 = layer_create(GRect(0, 0, 144, 50));
-        text_layer_set_text(s_output_layer, s_buffer);
-          layer_set_update_proc(circle_layer1, draw_circle1_update_proc);
-           layer_add_child(window_layer, circle_layer1);
-        break;
+      if (t->value){
+      layer_set_update_proc(circle_layer1, draw_circle1_update_true);
+      } else {
+        layer_set_update_proc(circle_layer1, draw_circle1_update_false);
+      }
+      layer_add_child(window_layer, circle_layer1);
+      break;
       case 2:
       circle_layer2 = layer_create(GRect(0, 0, 144, 50));
-          layer_set_update_proc(circle_layer2, draw_circle2_update_proc); 
-          layer_add_child(window_layer, circle_layer2);
+            if (t->value){
+      layer_set_update_proc(circle_layer2, draw_circle2_update_true);
+      } else {
+        layer_set_update_proc(circle_layer2, draw_circle2_update_false);
+      }
+      layer_add_child(window_layer, circle_layer2);
       break;
     }
 
@@ -99,11 +117,11 @@ static void up_click_handler(ClickRecognizerRef recognizer, void *context) {
 }
 
 static void select_click_handler(ClickRecognizerRef recognizer, void *context) {
-  text_layer_set_text(s_output_layer, "Select pressed!");
+  //text_layer_set_text(s_output_layer, "Select pressed!");
 }
 
 static void down_click_handler(ClickRecognizerRef recognizer, void *context) {
-  text_layer_set_text(s_output_layer, "Down pressed!");
+  //text_layer_set_text(s_output_layer, "Down pressed!");
 }
 
 static void click_config_provider(void *context) {
@@ -202,14 +220,15 @@ static void main_window_load(Window *window) {
   text_layer_set_font(s_date_layer, fonts_get_system_font(FONT_KEY_ROBOTO_CONDENSED_21));
   layer_add_child(window_layer, text_layer_get_layer(s_date_layer));
 
+  // To test click recognizers
   // Create output TextLayer
-  s_output_layer = text_layer_create(GRect(5, 0, 144, 50));
-  text_layer_set_font(s_output_layer, fonts_get_system_font(FONT_KEY_GOTHIC_24));
-  text_layer_set_text_color(s_output_layer, COLOR_FOREGROUND);
-  text_layer_set_text(s_output_layer, "No button pressed yet.");
-  text_layer_set_background_color(s_output_layer, GColorClear);
-  //text_layer_set_overflow_mode(s_output_layer, GTextOverflowModeWordWrap);
-  layer_add_child(window_layer, text_layer_get_layer(s_output_layer));
+//   s_output_layer = text_layer_create(GRect(5, 0, 144, 50));
+//   text_layer_set_font(s_output_layer, fonts_get_system_font(FONT_KEY_GOTHIC_24));
+//   text_layer_set_text_color(s_output_layer, COLOR_FOREGROUND);
+//   text_layer_set_text(s_output_layer, "No button pressed yet.");
+//   text_layer_set_background_color(s_output_layer, GColorClear);
+//   //text_layer_set_overflow_mode(s_output_layer, GTextOverflowModeWordWrap);
+//   layer_add_child(window_layer, text_layer_get_layer(s_output_layer));
 
 }
 // -----
@@ -233,7 +252,7 @@ static void init() {
   app_message_register_inbox_dropped(inbox_dropped_callback);
   app_message_register_outbox_failed(outbox_failed_callback);
   app_message_register_outbox_sent(outbox_sent_callback);
-  
+
   // Register app service
   app_message_open(app_message_inbox_size_maximum(), app_message_outbox_size_maximum());
 
@@ -241,7 +260,7 @@ static void init() {
     window_set_fullscreen(s_main_window, true);
   #endif
 
-  window_set_click_config_provider(s_main_window, click_config_provider);
+    window_set_click_config_provider(s_main_window, click_config_provider);
 
   window_stack_push(s_main_window, true);
 
