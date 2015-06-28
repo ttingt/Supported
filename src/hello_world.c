@@ -11,7 +11,7 @@
   #define COLOR_BACKGROUND GColorBlack
   #endif
 
-static const int SEND_HELP_KEY = 0;
+  static const int SEND_HELP_KEY = 0;
 static const int SEND_HELP_VALUE = 1;
 static const int SENT_TO_HELP = 1;
 static const int FINISHED_SENDING = 2;
@@ -36,7 +36,7 @@ static void messageSend(int key, int value) {
 }
 
 void draw_circle1_update_true(Layer *this_layer, GContext *ctx) {
-  graphics_context_set_stroke_color(ctx, COLOR_FOREGROUND);
+  graphics_context_set_fill_color(ctx, COLOR_FOREGROUND);
   graphics_fill_circle(ctx, GPoint(20,10), 3);
 }
 
@@ -46,7 +46,7 @@ void draw_circle1_update_false(Layer *this_layer, GContext *ctx) {
 }
 
 void draw_circle2_update_true(Layer *this_layer, GContext *ctx) {
-  graphics_context_set_stroke_color(ctx, COLOR_FOREGROUND);
+  graphics_context_set_fill_color(ctx, COLOR_FOREGROUND);
   graphics_fill_circle(ctx, GPoint(30,10), 3);
 }
 
@@ -63,7 +63,7 @@ static void inbox_received_callback(DictionaryIterator *iterator, void *context)
   // Process all pairs present
   while (t != NULL) {
     // Long lived buffer
-//    static char s_buffer[64];
+    //    static char s_buffer[64];
 
     // Process this pair's key
     switch (t->key) {
@@ -73,7 +73,7 @@ static void inbox_received_callback(DictionaryIterator *iterator, void *context)
       //text_layer_set_text(s_output_layer, s_buffer);
       circle_layer1 = layer_create(GRect(0, 0, 144, 50));
       if (t->value != 0){
-      layer_set_update_proc(circle_layer1, draw_circle1_update_true);
+        layer_set_update_proc(circle_layer1, draw_circle1_update_true);
       } else {
         layer_set_update_proc(circle_layer1, draw_circle1_update_false);
       }
@@ -81,8 +81,8 @@ static void inbox_received_callback(DictionaryIterator *iterator, void *context)
       break;
       case 2:
       circle_layer2 = layer_create(GRect(0, 0, 144, 50));
-            if (t->value != 0){
-      layer_set_update_proc(circle_layer2, draw_circle2_update_true);
+      if (t->value != 0){
+        layer_set_update_proc(circle_layer2, draw_circle2_update_true);
       } else {
         layer_set_update_proc(circle_layer2, draw_circle2_update_false);
       }
@@ -112,8 +112,16 @@ static void outbox_sent_callback(DictionaryIterator *iterator, void *context) {
 
 // ----- Click handlers for Pebble Watch
 static void up_click_handler(ClickRecognizerRef recognizer, void *context) {
-//   text_layer_set_text(s_output_layer, "Up pressed!");
-  messageSend(SEND_HELP_KEY, SEND_HELP_VALUE);
+  //   text_layer_set_text(s_output_layer, "Up pressed!");
+  circle_layer1 = layer_create(GRect(0, 0, 144, 50));
+  layer_set_update_proc(circle_layer1, draw_circle1_update_true);
+  layer_add_child(window_layer, circle_layer1);
+  
+  circle_layer2 = layer_create(GRect(0, 0, 144, 50));
+  layer_set_update_proc(circle_layer2, draw_circle2_update_false);
+  layer_add_child(window_layer, circle_layer2);
+  
+  //messageSend(SEND_HELP_KEY, SEND_HELP_VALUE);
 }
 
 static void select_click_handler(ClickRecognizerRef recognizer, void *context) {
@@ -222,13 +230,13 @@ static void main_window_load(Window *window) {
 
   // To test click recognizers
   // Create output TextLayer
-//   s_output_layer = text_layer_create(GRect(5, 0, 144, 50));
-//   text_layer_set_font(s_output_layer, fonts_get_system_font(FONT_KEY_GOTHIC_24));
-//   text_layer_set_text_color(s_output_layer, COLOR_FOREGROUND);
-//   text_layer_set_text(s_output_layer, "No button pressed yet.");
-//   text_layer_set_background_color(s_output_layer, GColorClear);
-//   //text_layer_set_overflow_mode(s_output_layer, GTextOverflowModeWordWrap);
-//   layer_add_child(window_layer, text_layer_get_layer(s_output_layer));
+  //   s_output_layer = text_layer_create(GRect(5, 0, 144, 50));
+  //   text_layer_set_font(s_output_layer, fonts_get_system_font(FONT_KEY_GOTHIC_24));
+  //   text_layer_set_text_color(s_output_layer, COLOR_FOREGROUND);
+  //   text_layer_set_text(s_output_layer, "No button pressed yet.");
+  //   text_layer_set_background_color(s_output_layer, GColorClear);
+  //   //text_layer_set_overflow_mode(s_output_layer, GTextOverflowModeWordWrap);
+  //   layer_add_child(window_layer, text_layer_get_layer(s_output_layer));
 
 }
 // -----
