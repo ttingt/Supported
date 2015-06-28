@@ -25,7 +25,7 @@ static Layer* circle_layer1;
 static Layer* circle_layer2;
 
 
-static TextLayer *s_output_layer;
+//static TextLayer *s_output_layer;
 
 // ----- Message calls and receive from pebble to phone and vice versa
 static void messageSend(int key, int value) {
@@ -72,7 +72,7 @@ static void inbox_received_callback(DictionaryIterator *iterator, void *context)
       // snprintf(s_buffer, sizeof(s_buffer), "Received '%s'", t->value->cstring);
       //text_layer_set_text(s_output_layer, s_buffer);
       circle_layer1 = layer_create(GRect(0, 0, 144, 50));
-      if (t->value){
+      if (t->value != 0){
       layer_set_update_proc(circle_layer1, draw_circle1_update_true);
       } else {
         layer_set_update_proc(circle_layer1, draw_circle1_update_false);
@@ -81,7 +81,7 @@ static void inbox_received_callback(DictionaryIterator *iterator, void *context)
       break;
       case 2:
       circle_layer2 = layer_create(GRect(0, 0, 144, 50));
-            if (t->value){
+            if (t->value != 0){
       layer_set_update_proc(circle_layer2, draw_circle2_update_true);
       } else {
         layer_set_update_proc(circle_layer2, draw_circle2_update_false);
