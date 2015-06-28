@@ -21,7 +21,8 @@ static TextLayer *s_time_layer;
 static TextLayer *s_date_layer;
 static Layer *s_board_layer;
 static Layer *window_layer;
-static Layer* circle_layer;
+static Layer* circle_layer1;
+static Layer* circle_layer2;
 
 
 static TextLayer *s_output_layer;
@@ -35,17 +36,17 @@ static void messageSend(int key, int value) {
 }
 
 void draw_circle1_update_proc(Layer *this_layer, GContext *ctx) {
+  graphics_context_set_stroke_color(ctx, COLOR_FOREGROUND);
   graphics_draw_circle(ctx, GPoint(20,10), 3);
 }
 
 void draw_circle2_update_proc(Layer *this_layer, GContext *ctx) {
+  graphics_context_set_stroke_color(ctx, COLOR_FOREGROUND);
   graphics_draw_circle(ctx, GPoint(30,10), 3);
 }
 
 
 static void inbox_received_callback(DictionaryIterator *iterator, void *context) {
-  circle_layer = layer_create(GRect(0, 0, 144, 50));
-  
   // Get the first pair
   Tuple *t = dict_read_first(iterator);
 
@@ -57,15 +58,17 @@ static void inbox_received_callback(DictionaryIterator *iterator, void *context)
     // Process this pair's key
     switch (t->key) {
       case 1:
-        // Copy value and display
+        // Copy value and display8
         snprintf(s_buffer, sizeof(s_buffer), "Received '%s'", t->value->cstring);
+      circle_layer1 = layer_create(GRect(0, 0, 144, 50));
         text_layer_set_text(s_output_layer, s_buffer);
-          layer_set_update_proc(circle_layer, draw_circle1_update_proc);
-           layer_add_child(window_layer, circle_layer);
+          layer_set_update_proc(circle_layer1, draw_circle1_update_proc);
+           layer_add_child(window_layer, circle_layer1);
         break;
       case 2:
-          layer_set_update_proc(circle_layer, draw_circle2_update_proc); 
-          layer_add_child(window_layer, circle_layer);
+      circle_layer2 = layer_create(GRect(0, 0, 144, 50));
+          layer_set_update_proc(circle_layer2, draw_circle2_update_proc); 
+          layer_add_child(window_layer, circle_layer2);
       break;
     }
 
