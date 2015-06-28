@@ -19,15 +19,27 @@ static Layer *s_board_layer;
 
 static TextLayer *s_output_layer;
 
-static void up_click_handler(ClickRecognizerRef recognizer, void *context) {
-  text_layer_set_text(s_output_layer, "Up pressed!");
-    DictionaryIterator *iterator;
+static void messageSend() {
+  DictionaryIterator *iterator;
   app_message_outbox_begin(&iterator);
-
   int key = 0;
   int value = 1;
   dict_write_int(iterator, key, &value, sizeof(int), true);
   app_message_outbox_send();
+}
+
+static void up_click_handler(ClickRecognizerRef recognizer, void *context) {
+  text_layer_set_text(s_output_layer, "Up pressed!");
+//   DictionaryIterator *iterator;
+//   app_message_outbox_begin(&iterator);
+
+//   int key = 0;
+//   int value = 1;
+//   dict_write_int(iterator, key, &value, sizeof(int), true);
+//   app_message_outbox_send();
+  messageSend();
+
+  
 }
 
 static void select_click_handler(ClickRecognizerRef recognizer, void *context) {
@@ -154,6 +166,8 @@ static void init() {
     .load = main_window_load,
     .unload = main_window_unload,
   });
+  
+ app_message_open(app_message_inbox_size_maximum(), app_message_outbox_size_maximum());
   
   #ifdef PBL_SDK_2
   window_set_fullscreen(s_main_window, true);

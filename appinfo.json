@@ -11,6 +11,10 @@
     },
     "sdkVersion": "3",
     "shortName": "angelhacks",
+    "targetPlatforms": [
+        "aplite",
+        "basalt"
+    ],
     "uuid": "7f6023b6-e313-498a-a26b-d8d09af1a3a3",
     "versionLabel": "1.0",
     "watchapp": {
